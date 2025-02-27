@@ -12,6 +12,7 @@ const handleInput = () => {
     const SHELL_TYPE = 1
     mapOfCommandType.set('echo', SHELL_TYPE)
     mapOfCommandType.set('exit', SHELL_TYPE)
+    mapOfCommandType.set('type', SHELL_TYPE)
     const arr = answer.split(" ")
     if(arr[0] === 'exit') {
       rl.close()
