@@ -7,6 +7,12 @@ const rl = readline.createInterface({
 
 const handleInput = () => {
   rl.question("$ ", (answer) => {
+    const arr = answer.split(" ")
+    if(arr[0] === 'exit') {
+      console.log(0)
+      rl.close()
+      return
+    }
     console.log(`${answer}: command not found`)
     handleInput()
   });
