@@ -11,8 +11,13 @@ const handleInput = () => {
     if(arr[0] === 'exit') {
       rl.close()
       return 0
+    } else if(arr[0] === 'echo') {
+      arr.shift()
+      console.log(arr.join(" "))
+    } else {
+      console.log(`${answer}: command not found`)
     }
-    console.log(`${answer}: command not found`)
+    
     handleInput()
   });
 }
