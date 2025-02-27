@@ -5,7 +5,12 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-rl.question("$ ", (answer) => {
-  console.log(`${answer}: command not found`)
-  rl.close();
-});
+const handleInput = () => {
+  rl.question("$ ", (answer) => {
+    console.log(`${answer}: command not found`)
+    handleInput()
+  });
+}
+
+handleInput()
+
