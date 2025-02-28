@@ -1,12 +1,34 @@
 const readline = require("readline");
+const path = require('path');
+const fs = require('fs');
+let currentCommandPath
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
+const isCommandExecutable = (command, envPath) => {
+  const dirs = envPath.split(":")
+  for (const dir of dirs) {
+    const currentPath = path.join(dir, command)
+    const stats = fs.statSync(currentPath)
+    if(stats.isFile() && isExecutable(stats)) {
+      currentCommandPath = currentPath
+      return true
+    }
+  }
+  return false
+}
+
+const isExecutable = (stats) => {
+  return (stats.mode & 0o111) !== 0;
+}
+
 const handleInput = () => {
   rl.question("$ ", (answer) => {
+    const envPath = process.env.PATH
+
     const mapOfCommandType = new Map()
     const UNRECOGNIZED_COMMAND = 0
     const SHELL_TYPE = 1
@@ -23,7 +45,10 @@ const handleInput = () => {
     } else if(arr[0] === 'type') {
       if (mapOfCommandType.get(arr[1]) && mapOfCommandType.get(arr[1]) === 1) {
         console.log(`${arr[1]} is a shell builtin`)
-      } else {
+      } else if(isCommandExecutable(arr[1], envPath)) {
+        console.log(`${arr[1]} is ${currentCommandPath}`)
+      }
+      else {
         console.log(`${arr[1]}: not found`)
       }
       
