@@ -12,10 +12,15 @@ const isCommandExecutable = (command, envPath) => {
   const dirs = envPath.split(":")
   for (const dir of dirs) {
     const currentPath = path.join(dir, command)
-    const stats = fs.statSync(currentPath)
-    if(stats.isFile() && isExecutable(stats)) {
-      currentCommandPath = currentPath
-      return true
+    try {
+      const stats = fs.statSync(currentPath);
+      if (stats.isFile() && isExecutable(stats)) {
+        currentCommandPath = currentPath;
+        return true;
+      }
+    } catch (error) {
+      // File doesn't exist or can't be accessed - continue to next directory
+      continue;
     }
   }
   return false
