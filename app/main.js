@@ -65,7 +65,7 @@ const executeCommand = (commandPath, args) => {
 
     child.on('close', (code) => {
       if (code === 0) {
-        resolve({ stdout: stdoutData, stderr: stderrData });
+        resolve({ stdout, stderr });
       } else {
         reject(new Error(`Command exited with code ${code}`));
       }
