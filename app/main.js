@@ -33,6 +33,7 @@ const isExecutable = (stats) => {
 
 const executeCommand = (commandPath, args) => {
   return new Promise((resolve, reject) => {
+    process.chdir()
     const child = spawn(commandPath, args, {
       stdio: ['inherit', 'pipe', 'pipe']
     });
@@ -88,7 +89,7 @@ const handleInput = () => {
     } else if (isCommandExecutable(arr[0], envPath)) {
       const commandToExecute = arr.shift()
       try {
-        await executeCommand(currentCommandPath, arr)
+        await executeCommand(commandToExecute, arr)
       } catch (error) {
         console.error(`Error executing command: ${error.message}`);
       }
