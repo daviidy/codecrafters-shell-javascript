@@ -61,6 +61,7 @@ const handleInput = () => {
     } else if (isCommandExecutable(arr[0], envPath)) {
       const commandToExecute = arr.shift()
       execFile(path.join(envPath, commandToExecute), arr, (error, stdout, stderr) => {
+        console.log('stdout is', stdout)
         if(error) {
           console.error(stderr)
         }
