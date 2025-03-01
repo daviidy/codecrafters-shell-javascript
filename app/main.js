@@ -58,8 +58,8 @@ const handleInput = () => {
         console.log(`${arr[1]}: not found`)
       }
       
-    } else if (isCommandExecutable(arr[1], envPath)) {
-      execFile(path.join(envPath, arr[1]), arr.shift(), (error, stdout, stderr) => {
+    } else if (isCommandExecutable(arr[0], envPath)) {
+      execFile(path.join(envPath, arr[0]), arr.shift(), (error, stdout, stderr) => {
         if(error) {
           console.error(stderr)
         }
