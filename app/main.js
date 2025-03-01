@@ -39,7 +39,7 @@ const executeCommand = (commandPath, args) => {
     // Make sure this directory is at the front of the PATH
     // so that if commandDir is not found, it looks for the command
     // in the second part of the colon :
-    process.env.PATH = `${commandDir}:${env.PATH}`;
+    process.env.PATH = `${commandDir}:${process.env.PATH}`;
     const child = spawn(commandPath, args, {
       stdio: ['inherit', 'pipe', 'pipe']
     });
