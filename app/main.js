@@ -51,17 +51,25 @@ const executeCommand = (commandPath, args) => {
       const output = data.toString();
       stdout += output;
       process.stdout.write(output);
-    });
+    })
 
     child.stderr.on('data', (data) => {
       const output = data.toString();
       stderr += output;
       process.stderr.write(output);
-    });
+    })
 
     child.on('error', (err) => {
       reject(err);
-    });
+    })
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve({ stdout: stdoutData, stderr: stderrData });
+      } else {
+        reject(new Error(`Command exited with code ${code}`));
+      }
+    })
   })
 }
 
