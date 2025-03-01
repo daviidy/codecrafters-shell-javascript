@@ -1,6 +1,8 @@
 const readline = require("readline");
 const path = require('path');
 const fs = require('fs');
+const {execFile} = require('child_process');
+const { stdout, stderr } = require("process");
 let currentCommandPath
 
 const rl = readline.createInterface({
@@ -19,7 +21,6 @@ const isCommandExecutable = (command, envPath) => {
         return true;
       }
     } catch (error) {
-      // File doesn't exist or can't be accessed - continue to next directory
       continue;
     }
   }
@@ -57,6 +58,17 @@ const handleInput = () => {
         console.log(`${arr[1]}: not found`)
       }
       
+    } else if (isCommandExecutable(arr[1], envPath)) {
+      execFile(path.join(envPath, arr[1]), arr.shift(), (error, stdout, stderr) => {
+        if(error) {
+          console.error(stderr)
+        }
+        if(stderr) {
+          console.log('Errors:', stderr)
+        }
+
+        console.log('Output', stdout)
+      })
     } else {
       console.log(`${answer}: command not found`)
     }
