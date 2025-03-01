@@ -33,7 +33,13 @@ const isExecutable = (stats) => {
 
 const executeCommand = (commandPath, args) => {
   return new Promise((resolve, reject) => {
-    process.chdir()
+    // get the name of the command
+    const commandDir = path.dirname(commandPath);
+
+    // Make sure this directory is at the front of the PATH
+    // so that if commandDir is not found, it looks for the command
+    // in the second part of the colon :
+    process.env.PATH = `${commandDir}:${env.PATH}`;
     const child = spawn(commandPath, args, {
       stdio: ['inherit', 'pipe', 'pipe']
     });
