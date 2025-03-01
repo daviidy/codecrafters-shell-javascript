@@ -1,7 +1,7 @@
 const readline = require("readline");
 const path = require('path');
 const fs = require('fs');
-const {execFile} = require('child_process');
+const {spawn} = require('child_process');
 const { stdout, stderr } = require("process");
 let currentCommandPath
 
@@ -31,8 +31,35 @@ const isExecutable = (stats) => {
   return (stats.mode & 0o111) !== 0;
 }
 
+const executeCommand = (commandPath, args) => {
+  return new Promise((resolve, reject) => {
+    const child = spawn(commandPath, args, {
+      stdio: ['inherit', 'pipe', 'pipe']
+    });
+
+    let stdout = 'Output: ';
+    let stderr = '';
+
+    child.stdout.on('data', (data) => {
+      const output = data.toString();
+      stdout += output;
+      process.stdout.write(output);
+    });
+
+    child.stderr.on('data', (data) => {
+      const output = data.toString();
+      stderr += output;
+      process.stderr.write(output);
+    });
+
+    child.on('error', (err) => {
+      reject(err);
+    });
+  })
+}
+
 const handleInput = () => {
-  rl.question("$ ", (answer) => {
+  rl.question("$ ", async (answer) => {
     const envPath = process.env.PATH
 
     const mapOfCommandType = new Map()
@@ -60,17 +87,11 @@ const handleInput = () => {
       
     } else if (isCommandExecutable(arr[0], envPath)) {
       const commandToExecute = arr.shift()
-      execFile(path.join(envPath, commandToExecute), arr, (error, stdout, stderr) => {
-        console.log('stdout is', stdout)
-        if(error) {
-          console.error(stderr)
-        }
-        if(stderr) {
-          console.log('Errors:', stderr)
-        }
-
-        console.log('Output', stdout)
-      })
+      try {
+        await executeCommand(currentCommandPath, arr)
+      } catch (error) {
+        console.error(`Error executing command: ${error.message}`);
+      }
     } else {
       console.log(`${answer}: command not found`)
     }
