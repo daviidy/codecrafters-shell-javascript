@@ -24,8 +24,12 @@ class ExternalCommand extends Command {
       const commandDir = path.dirname(commandPath);
       process.env.PATH = `${commandDir}:${process.env.PATH}`;
       
+      // Get just the basename for argv[0]
+      const commandName = path.basename(commandPath);
+      
       const child = spawn(commandPath, args, {
-        stdio: ['inherit', 'pipe', 'pipe']
+        stdio: ['inherit', 'pipe', 'pipe'],
+        argv0: commandName // Set argv[0] to just the command name
       });
   
       let stdout = '';
