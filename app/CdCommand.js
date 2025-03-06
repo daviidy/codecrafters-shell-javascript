@@ -14,13 +14,12 @@ class CdCommand extends Command {
             return { shouldContinue: true };
         }
 
-        const newPath = path.resolve(process.cwd(), args[0]);
+        let newPath = path.resolve(process.cwd(), args[0]);
 
         if (args[0] === "~") {
             args[0] = process.env.HOME || require("os").homedir();
-        }
-
-        if (!fs.existsSync(newPath)) {
+            newPath = path.resolve(args[0]);
+        } else if (!fs.existsSync(newPath)) {
             this.outputHandler.write(`cd: ${args[0]}: No such file or directory`);
             return { shouldContinue: true };
         }
