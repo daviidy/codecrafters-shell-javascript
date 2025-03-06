@@ -16,6 +16,10 @@ class CdCommand extends Command {
 
         const newPath = path.resolve(process.cwd(), args[0]);
 
+        if (args[0] === "~") {
+            args[0] = process.env.HOME || require("os").homedir();
+        }
+
         if (!fs.existsSync(newPath)) {
             this.outputHandler.write(`cd: ${args[0]}: No such file or directory`);
             return { shouldContinue: true };
