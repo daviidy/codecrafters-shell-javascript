@@ -17,14 +17,14 @@ class CdCommand extends Command {
         const newPath = path.resolve(process.cwd(), args[0]);
 
         if (!fs.existsSync(newPath)) {
-            this.outputHandler(`cd: ${args[0]}: No such file or directory`);
+            this.outputHandler.write(`cd: ${args[0]}: No such file or directory`);
             return { shouldContinue: true };
         }
 
         try {
             process.chdir(newPath);
         } catch (err) {
-            this.outputHandler(`cd: ${err.message}`);
+            this.outputHandler.write(`cd: ${err.message}`);
         }
         return { shouldContinue: true };
     }
