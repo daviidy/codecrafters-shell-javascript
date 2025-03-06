@@ -6,6 +6,7 @@ const { ExitCommand } = require("./ExitCommand");
 const { EchoCommand } = require("./EchoCommand");
 const { TypeCommand } = require("./TypeCommand");
 const { PwdCommand } = require("./PwdCommand");
+const { CdCommand } = require("./CdCommand");
 class Shell {
   constructor() {
     this.rl = readline.createInterface({
@@ -21,6 +22,7 @@ class Shell {
     this.commandRegistry.registerBuiltin('exit', new ExitCommand(this.rl));
     this.commandRegistry.registerBuiltin('echo', new EchoCommand(this.outputHandler));
     this.commandRegistry.registerBuiltin('pwd', new PwdCommand(this.outputHandler));
+    this.commandRegistry.registerBuiltin('cd', new CdCommand(this.outputHandler));
     this.commandRegistry.registerBuiltin('type', new TypeCommand(this.commandRegistry, this.outputHandler));
   }
   
