@@ -1,11 +1,11 @@
 const readline = require("readline");
-const { spawn } = require('child_process');
 const { OutputHandler } = require("./OutputHandler");
 const { InputHandler } = require("./InputHandler");
 const { CommandRegistry } = require("./CommandRegistry");
 const { ExitCommand } = require("./ExitCommand");
 const { EchoCommand } = require("./EchoCommand");
 const { TypeCommand } = require("./TypeCommand");
+const { PwdCommand } = require("./PwdCommand");
 class Shell {
   constructor() {
     this.rl = readline.createInterface({
@@ -20,6 +20,7 @@ class Shell {
     // Register builtin commands
     this.commandRegistry.registerBuiltin('exit', new ExitCommand(this.rl));
     this.commandRegistry.registerBuiltin('echo', new EchoCommand(this.outputHandler));
+    this.commandRegistry.registerBuiltin('pwd', new PwdCommand(this.outputHandler));
     this.commandRegistry.registerBuiltin('type', new TypeCommand(this.commandRegistry, this.outputHandler));
   }
   

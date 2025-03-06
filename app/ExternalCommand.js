@@ -1,5 +1,6 @@
 const { Command } = require("./Command");
 const path = require('path');
+const { spawn } = require('child_process');
 
 class ExternalCommand extends Command {
   constructor(commandPath, outputHandler) {
