@@ -27,9 +27,42 @@ class Shell {
   }
 
   getCommandNameAndArgs(input) {
-    const args = input.match(/(?:[^\s'"]+|'[^']*'|"[^"]*")+/g) || [];
+    const args = [];
+    let currentArg = '';
+    let inSingleQuote = false;
+    let inDoubleQuote = false;
+  
+    for (let i = 0; i < input.length; i++) {
+      const char = input[i];
+  
+      if (char === "'" && !inDoubleQuote) {
+        inSingleQuote = !inSingleQuote;
+        continue;
+      }
+  
+      if (char === '"' && !inSingleQuote) {
+        inDoubleQuote = !inDoubleQuote;
+        continue;
+      }
+  
+      if (char === ' ' && !inSingleQuote && !inDoubleQuote) {
+        if (currentArg.length > 0) {
+          args.push(currentArg);
+          currentArg = '';
+        }
+        continue;
+      }
+  
+      currentArg += char;
+    }
+  
+    if (currentArg.length > 0) {
+      args.push(currentArg);
+    }
+  
     const commandName = args.shift();
-    return { commandName, args };
+    const cleanedArgs = args.map(arg => arg.replace(/^['"]|['"]$/g, ''));
+    return { commandName, args: cleanedArgs };
   }
   
   async parseCommand(input) {
