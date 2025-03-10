@@ -29,8 +29,7 @@ class Shell {
   getCommandNameAndArgs(input) {
     const args = input.match(/(?:[^\s'"]+|'[^']*'|"[^"]*")+/g) || [];
     const commandName = args.shift().replace(/['"]/g, '');
-    const cleanedArgs = args.map(arg => arg.replace(/['"]/g, ''));
-    return { commandName, args: cleanedArgs };
+    return { commandName, args };
   }
   
   async parseCommand(input) {
