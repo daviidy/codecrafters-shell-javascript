@@ -25,11 +25,16 @@ class Shell {
     this.commandRegistry.registerBuiltin('cd', new CdCommand(this.outputHandler));
     this.commandRegistry.registerBuiltin('type', new TypeCommand(this.commandRegistry, this.outputHandler));
   }
+
+  getCommandNameAndArgs(input) {
+    const args = input.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
+    const commandName = args.shift().replace(/['"]/g, '');
+    return { commandName, args };
+  }
   
   async parseCommand(input) {
-    const args = input.split(' ');
-    const commandName = args.shift();
-    
+    const { commandName, args } = this.getCommandNameAndArgs(input);
+
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
     if (command) {
