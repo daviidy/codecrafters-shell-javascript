@@ -7,7 +7,8 @@ class EchoCommand extends Command {
     }
 
     execute(args) {
-        this.outputHandler.write(args.join(" "));
+        const output = args.map(arg => arg.replace(/['"]/g, '')).join(' ');
+        this.outputHandler.write(output);
         return { shouldContinue: true };
     }
 }
