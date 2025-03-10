@@ -35,16 +35,19 @@ class Shell {
     for (let i = 0; i < input.length; i++) {
       const char = input[i];
   
+      // if we encounter a single quote and we're not inside a double quote
       if (char === "'" && !inDoubleQuote) {
         inSingleQuote = !inSingleQuote;
         continue;
       }
   
+      // if we encounter a double quote and we're not inside a single quote
       if (char === '"' && !inSingleQuote) {
         inDoubleQuote = !inDoubleQuote;
         continue;
       }
   
+      // push the current argument if we encounter a space and we're not inside a quote
       if (char === ' ' && !inSingleQuote && !inDoubleQuote) {
         if (currentArg.length > 0) {
           args.push(currentArg);
@@ -56,10 +59,12 @@ class Shell {
       currentArg += char;
     }
   
+    // push the last argument
     if (currentArg.length > 0) {
       args.push(currentArg);
     }
   
+    // extract the command name and remove quotes from arguments
     const commandName = args.shift();
     const cleanedArgs = args.map(arg => arg.replace(/^['"]|['"]$/g, ''));
     return { commandName, args: cleanedArgs };
