@@ -79,8 +79,9 @@ class Shell {
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
-    const cleanedArgs = args.map(arg => arg.replace(/^['"]|['"]$/g, ''));
-    return { commandName, args: cleanedArgs };
+    // const cleanedArgs = args.map(arg => arg.replace(/^['"]|['"]$/g, ''));
+    // console.log('cleanedArgs', cleanedArgs);
+    return { commandName, args };
   }
   
   async parseCommand(input) {
