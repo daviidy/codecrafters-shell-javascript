@@ -31,9 +31,22 @@ class Shell {
     let currentArg = '';
     let inSingleQuote = false;
     let inDoubleQuote = false;
+    let escapeNextChar = false;
   
     for (let i = 0; i < input.length; i++) {
       const char = input[i];
+
+      // if we encounter an escape character, skip the next character
+      if(escapeNextChar) {
+        currentArg += char;
+        escapeNextChar = false;
+        continue;
+      }
+
+      if(char === '\\' && !inSingleQuote && !inDoubleQuote) {
+        escapeNextChar = true;
+        continue;
+      }
   
       // if we encounter a single quote and we're not inside a double quote
       if (char === "'" && !inDoubleQuote) {
