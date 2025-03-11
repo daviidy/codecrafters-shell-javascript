@@ -8,7 +8,6 @@ class EchoCommand extends Command {
 
     execute(args) {
         const output = args.join(' ');
-        console.log('output', output);
         this.outputHandler.write(output);
         return { shouldContinue: true };
     }
