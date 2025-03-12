@@ -43,7 +43,14 @@ class Shell {
         continue;
       }
 
+      // if we encounter a backslash and we're not inside a quote
       if(char === '\\' && !inSingleQuote && !inDoubleQuote) {
+        escapeNextChar = true;
+        continue;
+      }
+
+      // if we encounter a backslash and we're inside a quote
+      if(char === '\\' && (inSingleQuote || inDoubleQuote)) {
         escapeNextChar = true;
         continue;
       }
@@ -79,8 +86,6 @@ class Shell {
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
-    // const cleanedArgs = args.map(arg => arg.replace(/^['"]|['"]$/g, ''));
-    // console.log('cleanedArgs', cleanedArgs);
     return { commandName, args };
   }
   
