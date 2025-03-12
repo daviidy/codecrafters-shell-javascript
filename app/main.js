@@ -36,6 +36,16 @@ class Shell {
     for (let i = 0; i < input.length; i++) {
       const char = input[i];
 
+      if (escapeNextChar) {
+        if (char === 'n' && inDoubleQuote) {
+          currentArg += '\n'; // Convert \n to newline character
+        } else {
+          currentArg += char;
+        }
+        escapeNextChar = false;
+        continue;
+      }
+
       // if we encounter an escape character, skip the next character
       if(escapeNextChar) {
         currentArg += char;
