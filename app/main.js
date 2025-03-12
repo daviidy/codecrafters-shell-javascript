@@ -50,10 +50,10 @@ class Shell {
       }
 
       // if we encounter a backslash and we're inside a quote
-      if(char === '\\' && (inSingleQuote || inDoubleQuote) && (input[i + 1] === '"' || input[i + 1] === "'" || input[i + 1] === '\\' || input[i + 1] === 'n' || input[i + 1] === '$')) {
+      if(char === '\\' && inDoubleQuote && (input[i + 1] === '"' || input[i + 1] === "'" || input[i + 1] === '\\' || input[i + 1] === 'n' || input[i + 1] === '$')) {
         escapeNextChar = true;
         continue;
-      }
+      }        
   
       // if we encounter a single quote and we're not inside a double quote
       if (char === "'" && !inDoubleQuote) {
