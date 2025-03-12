@@ -38,11 +38,7 @@ class Shell {
 
       // if we encounter an escape character, skip the next character
       if(escapeNextChar) {
-        if (char === 'n' && inDoubleQuote) {
-          currentArg += ' '; // Convert \n to newline character
-        } else {
-          currentArg += char;
-        }
+        currentArg += char;
         escapeNextChar = false;
         continue;
       }
