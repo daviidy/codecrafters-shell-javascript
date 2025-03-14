@@ -32,6 +32,8 @@ class Shell {
     let inSingleQuote = false;
     let inDoubleQuote = false;
     let escapeNextChar = false;
+    let redirectionOperator = null;
+    let redirectionFile = null;
   
     for (let i = 0; i < input.length; i++) {
       const char = input[i];
@@ -40,6 +42,26 @@ class Shell {
       if(escapeNextChar) {
         currentArg += char;
         escapeNextChar = false;
+        continue;
+      }
+
+      if((char === '>' || (char === '1' && input[i + 1] === '>')) && !inSingleQuote && !inDoubleQuote) {
+        if (currentArg.length > 0) {
+          args.push(currentArg);
+          currentArg = '';
+        }
+        redirectionOperator = char === '>' ? '>' : '1>';
+        if (char === '1') i++;
+        continue;
+      }
+
+      if(redirectionOperator && char !== ' ') {
+        redirectionFile = '';
+        while(i < input.length && input[i] !== ' ') {
+          redirectionFile += input[i];
+          i++;
+        }
+        i--;
         continue;
       }
 
@@ -86,22 +108,34 @@ class Shell {
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
-    return { commandName, args };
+    return { 
+      commandName, 
+      args,
+      redirection: redirectionFile ? { operator: redirectionOperator, file: redirectionFile } : null 
+    };
   }
   
   async parseCommand(input) {
-    const { commandName, args } = this.getCommandNameAndArgs(input);
+    const { commandName, args, redirection } = this.getCommandNameAndArgs(input);
 
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
     if (command) {
+      if (redirection) {
+        // Create a new output handler that writes to the file
+        const fileOutputHandler = new OutputHandler(redirection.file);
+        command.outputHandler = fileOutputHandler;
+      }
       return { command, args };
     }
     
     // Check if it's an external command
     const commandType = this.commandRegistry.getCommandType(commandName);
     if (commandType === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
-      const externalCommand = this.commandRegistry.createExternalCommand(commandName, this.outputHandler);
+      const externalCommand = this.commandRegistry.createExternalCommand(
+        commandName, 
+        redirection ? new OutputHandler(redirection.file) : this.outputHandler
+      );
       return { command: externalCommand, args };
     }
     
