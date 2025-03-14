@@ -8,7 +8,13 @@ class EchoCommand extends Command {
 
     execute(args) {
         const output = args.join(' ');
-        this.outputHandler.write(output);
+        // Only write to stdout, never to stderr
+        if (!this.outputHandler.isStderr) {
+            this.outputHandler.write(output);
+        } else {
+            // If stderr is redirected, write to stdout anyway
+            process.stdout.write(output + '\n');
+        }
         return { shouldContinue: true };
     }
 }
