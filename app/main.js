@@ -45,13 +45,19 @@ class Shell {
         continue;
       }
 
-      if((char === '>' || (char === '1' && input[i + 1] === '>')) && !inSingleQuote && !inDoubleQuote) {
+      if((char === '>' || char === '1' || char === '2') && !inSingleQuote && !inDoubleQuote) {
+        if (char !== '>' && input[i + 1] !== '>') {
+          currentArg += char;
+          continue;
+        }
+        
         if (currentArg.length > 0) {
           args.push(currentArg);
           currentArg = '';
         }
-        redirectionOperator = char === '>' ? '>' : '1>';
-        if (char === '1') i++;
+        
+        redirectionOperator = char === '>' ? '1>' : char + '>';
+        if (char !== '>') i++; // Skip the next character if it's 1> or 2>
         continue;
       }
 
@@ -121,22 +127,27 @@ class Shell {
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
     if (command) {
-      if (redirection) {
-        // Create a new output handler that writes to the file
-        const fileOutputHandler = new OutputHandler(redirection.file);
-        command.outputHandler = fileOutputHandler;
-      }
-      return { command, args };
+        if (redirection) {
+            const isStderr = redirection.operator === '2>';
+            const fileOutputHandler = new OutputHandler(redirection.file, isStderr);
+            command.outputHandler = fileOutputHandler;
+        }
+        return { command, args };
     }
     
     // Check if it's an external command
     const commandType = this.commandRegistry.getCommandType(commandName);
     if (commandType === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
-      const externalCommand = this.commandRegistry.createExternalCommand(
-        commandName, 
-        redirection ? new OutputHandler(redirection.file) : this.outputHandler
-      );
-      return { command: externalCommand, args };
+        const isStderr = redirection?.operator === '2>';
+        const outputHandler = redirection ? 
+            new OutputHandler(redirection.file, isStderr) : 
+            this.outputHandler;
+            
+        const externalCommand = this.commandRegistry.createExternalCommand(
+            commandName,
+            outputHandler
+        );
+        return { command: externalCommand, args };
     }
     
     // Command not found

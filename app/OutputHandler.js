@@ -2,15 +2,16 @@ const fs = require('fs');
 const path = require('path');
 
 class OutputHandler {
-    constructor(outputFile = null) {
+    constructor(outputFile = null, isStderr = false) {
         this.outputFile = outputFile;
+        this.isStderr = isStderr;
+        
         if (outputFile) {
-            // Create directory if it doesn't exist
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            // Clear the file when first creating the handler
+            // Clear the file when creating the handler
             fs.writeFileSync(outputFile, '');
         }
     }
@@ -20,20 +21,26 @@ class OutputHandler {
             const content = newLine ? message + '\n' : message;
             fs.appendFileSync(this.outputFile, content);
         } else {
+            const stream = this.isStderr ? process.stderr : process.stdout;
             if (newLine) {
-                console.log(message);
+                stream.write(message + '\n');
             } else {
-                process.stdout.write(message);
+                stream.write(message);
             }
         }
     }
 
     writeError(message, newLine = true) {
-        // Error output should always go to stderr, not to the redirected file
-        if (newLine) {
-            console.error(message);
+        // If this is a stderr handler with redirection, write to file
+        if (this.isStderr && this.outputFile) {
+            const content = newLine ? message + '\n' : message;
+            fs.appendFileSync(this.outputFile, content);
         } else {
-            process.stderr.write(message);
+            if (newLine) {
+                process.stderr.write(message + '\n');
+            } else {
+                process.stderr.write(message);
+            }
         }
     }
 }
