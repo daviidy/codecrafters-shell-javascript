@@ -4,21 +4,21 @@ const path = require('path');
 class OutputHandler {
     constructor(outputFile = null) {
         this.outputFile = outputFile;
+        if (outputFile) {
+            // Create directory if it doesn't exist
+            const dir = path.dirname(outputFile);
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            // Clear the file when first creating the handler
+            fs.writeFileSync(outputFile, '');
+        }
     }
 
     write(message, newLine = true) {
         if (this.outputFile) {
-            // Create directory if it doesn't exist
-            const dir = path.dirname(this.outputFile);
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
-            }
-            
-            // Append newline if needed
             const content = newLine ? message + '\n' : message;
-            
-            // Write to file
-            fs.writeFileSync(this.outputFile, content);
+            fs.appendFileSync(this.outputFile, content);
         } else {
             if (newLine) {
                 console.log(message);
