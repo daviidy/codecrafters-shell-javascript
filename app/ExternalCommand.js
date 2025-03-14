@@ -36,7 +36,7 @@ class ExternalCommand extends Command {
       child.stdout.on('data', (data) => {
         const output = data.toString();
         stdout += output;
-        process.stdout.write(output);
+        this.outputHandler.write(output, false);
       });
   
       child.stderr.on('data', (data) => {
