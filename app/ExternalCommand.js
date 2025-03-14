@@ -12,11 +12,9 @@ class ExternalCommand extends Command {
   async execute(args) {
     try {
       await this.executeCommand(this.commandPath, args);
-      return { shouldContinue: true };
     } catch (error) {
-      this.outputHandler.writeError(`Error executing command: ${error.message}`);
-      return { shouldContinue: true };
     }
+    return { shouldContinue: true };
   }
   
   executeCommand(commandPath, args) {
