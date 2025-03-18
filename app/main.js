@@ -76,9 +76,11 @@ class Shell {
         continue;
       }
 
-      if(redirectionOperator && char !== ' ') {
-        redirectionFile = '';
-        while(i < input.length && input[i] !== ' ') {
+      if (redirectionOperator && char !== ' ') {
+        if (!redirectionFile) {
+          redirectionFile = '';
+        }
+        while (i < input.length && input[i] !== ' ') {
           redirectionFile += input[i];
           i++;
         }
