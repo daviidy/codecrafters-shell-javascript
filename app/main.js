@@ -172,7 +172,7 @@ class Shell {
         commandName,
         outputHandler
       );
-      return { command: externalCommand, args };
+        return { command: externalCommand, args };
     }
     
     // Command not found
@@ -185,7 +185,7 @@ class Shell {
     
     while (shouldContinue) {
       const input = await this.inputHandler.getInput("$ ");
-      console.log('args:', args);
+      
       if (input.trim() === '') {
         continue;
       }

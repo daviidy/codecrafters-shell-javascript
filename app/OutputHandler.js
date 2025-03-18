@@ -7,25 +7,19 @@ class OutputHandler {
         this.isStderr = isStderr;
         this.append = append;
 
-        // Create directory and prepare file if needed
-        if (outputFile) {
-            
+        if (outputFile && !append) {
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            
-            // Clear file if not appending
-            if (!append) {
-                fs.writeFileSync(outputFile, '');
-            }
+            fs.writeFileSync(outputFile, '');
         }
     }
 
     write(message, newLine = true) {
         if (this.outputFile) {
             const content = newLine ? message + '\n' : message;
-            fs.appendFileSync(this.outputFile, content); // Always append
+            fs.appendFileSync(this.outputFile, content);
         } else {
             const stream = this.isStderr ? process.stderr : process.stdout;
             if (newLine) {
