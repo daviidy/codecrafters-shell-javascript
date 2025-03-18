@@ -142,14 +142,15 @@ class Shell {
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
     if (command) {
-        if (redirection) {
-          const append = redirection?.operator === '2>>' || redirection?.operator === '1>>' || redirection?.operator === '>>';
-          const isStderr = redirection?.operator.startsWith('2');
-          const outputHandler = redirection
-            ? new OutputHandler(redirection.file, isStderr, append)
-            : this.outputHandler;
-        }
-        return { command, args };
+      if (redirection) {
+        const append = redirection?.operator === '2>>' || redirection?.operator === '1>>' || redirection?.operator === '>>';
+        const isStderr = redirection?.operator.startsWith('2');
+        const outputHandler = redirection
+          ? new OutputHandler(redirection.file, isStderr, append)
+          : this.outputHandler;
+        command.outputHandler = outputHandler; // Assign the output handler to the command
+      }
+      return { command, args };
     }
     
     // Check if it's an external command
@@ -160,12 +161,12 @@ class Shell {
       const outputHandler = redirection
         ? new OutputHandler(redirection.file, isStderr, append)
         : this.outputHandler;
-            
-        const externalCommand = this.commandRegistry.createExternalCommand(
-            commandName,
-            outputHandler
-        );
-        return { command: externalCommand, args };
+
+      const externalCommand = this.commandRegistry.createExternalCommand(
+        commandName,
+        outputHandler
+      );
+      return { command: externalCommand, args };
     }
     
     // Command not found
