@@ -147,8 +147,8 @@ class Shell {
     const { commandName, args, redirection } = this.getCommandNameAndArgs(input);
     
     if (redirection) {
-      // Handle redirections to /tmp directories
-      if (redirection.file.startsWith('/tmp/') && redirection.operator === '>>') {
+      // Handle all redirections to /tmp directories
+      if (redirection.file.startsWith('/tmp/')) {
         const dirPath = path.dirname(redirection.file);
         const fs = require('fs');
         
@@ -156,8 +156,12 @@ class Shell {
         try {
           fs.mkdirSync(dirPath, { recursive: true });
           
-          // Create empty file if it doesn't exist (like 'touch')
-          if (!fs.existsSync(redirection.file)) {
+          // For append mode, just touch the file if it doesn't exist
+          if (redirection.operator.includes('>>') && !fs.existsSync(redirection.file)) {
+            fs.writeFileSync(redirection.file, '');
+          }
+          // For overwrite mode (> or 2>), create empty file
+          else if (!redirection.operator.includes('>>')) {
             fs.writeFileSync(redirection.file, '');
           }
         } catch (err) {

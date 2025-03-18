@@ -7,9 +7,6 @@ class OutputHandler {
         this.isStderr = isStderr;
         this.append = append;
         this.fileInitialized = false;
-
-        // Don't try to access the file system in the constructor at all
-        // Just store the parameters for later use
     }
 
     _initializeFile() {
