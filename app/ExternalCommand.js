@@ -46,7 +46,7 @@ class ExternalCommand extends Command {
       child.stderr.on('data', (data) => {
         const output = data.toString();
         stderr += output;
-        this.outputHandler.writeError(output, false); // Redirect stderr
+        this.outputHandler.writeError(output, false);
       });
   
       child.on('error', (err) => {

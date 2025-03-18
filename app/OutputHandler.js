@@ -7,12 +7,13 @@ class OutputHandler {
         this.isStderr = isStderr;
         this.append = append;
 
+        // Clear file if not appending
         if (outputFile && !append) {
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            fs.writeFileSync(outputFile, ''); // Clear file only if not appending
+            fs.writeFileSync(outputFile, '');
         }
     }
 
