@@ -9,6 +9,7 @@ class OutputHandler {
 
         // Create directory and prepare file if needed
         if (outputFile) {
+            console.log('writing to file');
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
@@ -23,7 +24,6 @@ class OutputHandler {
 
     write(message, newLine = true) {
         if (this.outputFile) {
-            
             const content = newLine ? message + '\n' : message;
             fs.appendFileSync(this.outputFile, content); // Always append
         } else {
@@ -38,7 +38,6 @@ class OutputHandler {
 
     writeError(message, newLine = true) {
         // If this is a stderr handler with redirection, write to file
-        console.log('writing to file');
         if (this.isStderr && this.outputFile) {
             const content = newLine ? message + '\n' : message;
             fs.appendFileSync(this.outputFile, content);
