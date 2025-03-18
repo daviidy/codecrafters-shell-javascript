@@ -56,8 +56,8 @@ class Shell {
           currentArg = '';
         }
         
-        redirectionOperator = char === '>' ? '1>' : char + '>';
-        if (char !== '>') i++; // Skip the next character if it's 1> or 2>
+        redirectionOperator = input[i + 1] === '>' ? char + '>>' : char + '>';
+        i += input[i + 1] === '>' ? 2 : 1; // Skip the operator
         continue;
       }
 
@@ -138,16 +138,14 @@ class Shell {
     // Check if it's an external command
     const commandType = this.commandRegistry.getCommandType(commandName);
     if (commandType === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
-        const isStderr = redirection?.operator === '2>';
-        const outputHandler = redirection ? 
-            new OutputHandler(redirection.file, isStderr) : 
-            this.outputHandler;
-            
-        const externalCommand = this.commandRegistry.createExternalCommand(
-            commandName,
-            outputHandler
-        );
-        return { command: externalCommand, args };
+      const isStderr = redirection?.operator.startsWith('2');
+      const append = redirection?.operator === '2>>';
+      const outputHandler = redirection
+        ? new OutputHandler(redirection.file, isStderr, append)
+        : this.outputHandler;
+
+      const externalCommand = this.commandRegistry.createExternalCommand(commandName, outputHandler);
+      return { command: externalCommand, args };
     }
     
     // Command not found

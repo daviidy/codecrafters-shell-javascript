@@ -2,16 +2,16 @@ const fs = require('fs');
 const path = require('path');
 
 class OutputHandler {
-    constructor(outputFile = null, isStderr = false) {
+    constructor(outputFile = null, isStderr = false, append = false) {
         this.outputFile = outputFile;
         this.isStderr = isStderr;
-        
-        if (outputFile) {
+        this.append = append;
+
+        if (outputFile && !append) {
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            // Clear the file when creating the handler
             fs.writeFileSync(outputFile, '');
         }
     }
