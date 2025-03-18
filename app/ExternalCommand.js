@@ -36,21 +36,17 @@ class ExternalCommand extends Command {
       child.stdout.on('data', (data) => {
         const output = data.toString();
         stdout += output;
-        if (!this.outputHandler.outputFile || this.outputHandler.isStderr) {
-          process.stdout.write(output);
+        if (!this.outputHandler.isStderr) {
+          this.outputHandler.write(output, false); // Redirect stdout
         } else {
-          this.outputHandler.write(output, false);
+          process.stdout.write(output); // Print to console
         }
       });
-  
+
       child.stderr.on('data', (data) => {
         const output = data.toString();
         stderr += output;
-        if (this.outputHandler.isStderr) {
-          this.outputHandler.writeError(output, false); // Redirect to file
-        } else {
-          process.stderr.write(output); // Print to console
-        }
+        this.outputHandler.writeError(output, false); // Redirect stderr
       });
   
       child.on('error', (err) => {

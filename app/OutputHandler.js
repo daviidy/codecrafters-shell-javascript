@@ -12,14 +12,14 @@ class OutputHandler {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            fs.writeFileSync(outputFile, '');
+            fs.writeFileSync(outputFile, ''); // Clear file only if not appending
         }
     }
 
     write(message, newLine = true) {
         if (this.outputFile) {
             const content = newLine ? message + '\n' : message;
-            fs.appendFileSync(this.outputFile, content);
+            fs.appendFileSync(this.outputFile, content); // Always append
         } else {
             const stream = this.isStderr ? process.stderr : process.stdout;
             if (newLine) {
