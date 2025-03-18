@@ -130,7 +130,7 @@ class Shell {
       args.push(currentArg);
     }
 
-    console.log('redirectionOperator:', redirectionOperator);
+    console.log('redirectionOperator:', args);
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
