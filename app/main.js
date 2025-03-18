@@ -185,11 +185,10 @@ class Shell {
     
     while (shouldContinue) {
       const input = await this.inputHandler.getInput("$ ");
-      
+      console.log('args:', args);
       if (input.trim() === '') {
         continue;
       }
-      console.log('args:');
       
       const { command, args } = await this.parseCommand(input);
       
