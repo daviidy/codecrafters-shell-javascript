@@ -7,26 +7,38 @@ class OutputHandler {
         this.outputFile = outputFile;
         this.isStderr = isStderr;
         this.append = append;
-
-        // Create directory and prepare file if needed
-        if (outputFile) {
-            const dir = path.dirname(outputFile);
-            console.log('OutputHandler', isStderr, append);
+        
+        // Only initialize file immediately if we're not appending
+        // For append mode, we'll create the file on first write
+        if (outputFile && !append) {
+            this._ensureDirectoryExists();
+            fs.writeFileSync(outputFile, '');
+        }
+    }
+    
+    _ensureDirectoryExists() {
+        if (this.outputFile) {
+            const dir = path.dirname(this.outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
-            }
-            
-            // Clear file if not appending
-            if (!append) {
-                fs.writeFileSync(outputFile, '');
             }
         }
     }
 
     write(message, newLine = true) {
         if (this.outputFile) {
-            const content = newLine ? message + '\n' : message;
-            fs.appendFileSync(this.outputFile, content); // Always append
+            try {
+                // For append mode, ensure directory exists on first write
+                if (this.append) {
+                    this._ensureDirectoryExists();
+                }
+                const content = newLine ? message + '\n' : message;
+                fs.appendFileSync(this.outputFile, content);
+            } catch (error) {
+                // If write fails, output to console instead
+                process.stderr.write(`Error writing to ${this.outputFile}: ${error.message}\n`);
+                process.stdout.write(newLine ? message + '\n' : message);
+            }
         } else {
             const stream = this.isStderr ? process.stderr : process.stdout;
             if (newLine) {
@@ -40,8 +52,18 @@ class OutputHandler {
     writeError(message, newLine = true) {
         // If this is a stderr handler with redirection, write to file
         if (this.isStderr && this.outputFile) {
-            const content = newLine ? message + '\n' : message;
-            fs.appendFileSync(this.outputFile, content);
+            try {
+                // For append mode, ensure directory exists on first write
+                if (this.append) {
+                    this._ensureDirectoryExists();
+                }
+                const content = newLine ? message + '\n' : message;
+                fs.appendFileSync(this.outputFile, content);
+            } catch (error) {
+                // If write fails, output to stderr instead
+                process.stderr.write(`Error writing to ${this.outputFile}: ${error.message}\n`);
+                process.stderr.write(newLine ? message + '\n' : message);
+            }
         } else {
             if (newLine) {
                 process.stderr.write(message + '\n');
