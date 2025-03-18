@@ -56,8 +56,12 @@ class Shell {
           currentArg = '';
         }
         
-        redirectionOperator = input[i + 1] === '>' ? char + '>>' : char + '>';
-        i += input[i + 1] === '>' ? 2 : 1; // Skip the operator
+        if (char === '>' && input[i + 1] === '>') {
+          redirectionOperator = '>>'; // Correctly detect append operator
+          i += 1; // Skip the second '>'
+        } else if (char === '>' || char === '1' || char === '2') {
+          redirectionOperator = char + '>'; // Handle single redirection (e.g., '>', '1>', '2>')
+        }
         console.log('redirectionOperator', redirectionOperator);
         continue;
       }
