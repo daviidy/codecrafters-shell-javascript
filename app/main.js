@@ -45,7 +45,18 @@ class Shell {
         continue;
       }
 
-      if ((char === '>' || char === '1' || char === '2') && !inSingleQuote && !inDoubleQuote) {
+      if((char === '>' || char === '1' || char === '2') && !inSingleQuote && !inDoubleQuote) {
+        if (char !== '>' && input[i + 1] !== '>') {
+          currentArg += char;
+          continue;
+        }
+        
+        if (currentArg.length > 0) {
+          args.push(currentArg);
+          currentArg = '';
+        }
+        
+        // handle 1>, 2>, 1>>, 2>> operators
         if (char === '>' && input[i + 1] === '>') {
           redirectionOperator = '>>'; // Append operator
           i += 1; // Skip the second '>'
@@ -68,24 +79,16 @@ class Shell {
         } else if (char === '>' && input[i + 1] !== '>') {
           redirectionOperator = '1>'; // Default to stdout overwrite
         }
-
-        if (currentArg.length > 0) {
-          args.push(currentArg);
-          currentArg = '';
-        }
         continue;
       }
 
-      if (redirectionOperator && char !== ' ') {
-        if (!redirectionFile) {
-          redirectionFile = '';
-        }
-        while (i < input.length && input[i] !== ' ') {
+      if(redirectionOperator && char !== ' ') {
+        redirectionFile = '';
+        while(i < input.length && input[i] !== ' ') {
           redirectionFile += input[i];
           i++;
         }
         i--;
-        redirectionOperator = null; // Reset redirection operator after capturing the file
         continue;
       }
 
@@ -130,7 +133,7 @@ class Shell {
       args.push(currentArg);
     }
 
-    console.log('redirectionOperator:', args);
+    console.log('redirect', redirectionOperator, redirectionFile);
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
@@ -147,31 +150,27 @@ class Shell {
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
     if (command) {
-      if (redirection) {
-        const append = redirection?.operator === '2>>' || redirection?.operator === '1>>' || redirection?.operator === '>>';
-        const isStderr = redirection?.operator.startsWith('2');
-        const outputHandler = redirection
-          ? new OutputHandler(redirection.file, isStderr, append)
-          : this.outputHandler;
-        command.outputHandler = outputHandler; // Assign the output handler to the command
-      }
-      return { command, args };
+        if (redirection) {
+            const isStderr = redirection.operator === '2>';
+            const fileOutputHandler = new OutputHandler(redirection.file, isStderr);
+            command.outputHandler = fileOutputHandler;
+        }
+        return { command, args };
     }
     
     // Check if it's an external command
     const commandType = this.commandRegistry.getCommandType(commandName);
     if (commandType === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
-      const append = redirection?.operator === '2>>' || redirection?.operator === '1>>' || redirection?.operator === '>>';
-      const isStderr = redirection?.operator.startsWith('2');
-      const outputHandler = redirection
-        ? new OutputHandler(redirection.file, isStderr, append)
-        : this.outputHandler;
-
-      const externalCommand = this.commandRegistry.createExternalCommand(
-        commandName,
-        outputHandler
-      );
-      return { command: externalCommand, args };
+        const isStderr = redirection?.operator === '2>';
+        const outputHandler = redirection ? 
+            new OutputHandler(redirection.file, isStderr) : 
+            this.outputHandler;
+            
+        const externalCommand = this.commandRegistry.createExternalCommand(
+            commandName,
+            outputHandler
+        );
+        return { command: externalCommand, args };
     }
     
     // Command not found
