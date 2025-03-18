@@ -9,7 +9,7 @@ class OutputHandler {
 
         // Create directory and prepare file if needed
         if (outputFile) {
-            console.log('Output file:', outputFile);
+            
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });

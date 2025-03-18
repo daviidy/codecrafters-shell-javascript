@@ -17,6 +17,7 @@ class Shell {
     this.outputHandler = new OutputHandler();
     this.inputHandler = new InputHandler(this.rl);
     this.commandRegistry = new CommandRegistry();
+    console.log('Output file:');
     
     // Register builtin commands
     this.commandRegistry.registerBuiltin('exit', new ExitCommand(this.rl));
