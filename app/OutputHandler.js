@@ -6,13 +6,13 @@ class OutputHandler {
         this.outputFile = outputFile;
         this.isStderr = isStderr;
         this.append = append;
-        console.log('OutputHandler', outputFile, isStderr, append);
 
         // Create directory and prepare file if needed
         if (outputFile) {
             console.log('writing to file');
             const dir = path.dirname(outputFile);
             if (!fs.existsSync(dir)) {
+                console.log('writing to file 2');
                 fs.mkdirSync(dir, { recursive: true });
             }
             
