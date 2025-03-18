@@ -189,9 +189,10 @@ class Shell {
       if (input.trim() === '') {
         continue;
       }
+
+      console.log('test');
       
       const { command, args } = await this.parseCommand(input);
-      console.log('command', command);
       
       if (command) {
         const result = await command.execute(args);
