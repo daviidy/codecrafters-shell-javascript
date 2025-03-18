@@ -23,6 +23,7 @@ class OutputHandler {
 
     write(message, newLine = true) {
         if (this.outputFile) {
+            console.log('writing to file');
             const content = newLine ? message + '\n' : message;
             fs.appendFileSync(this.outputFile, content); // Always append
         } else {
