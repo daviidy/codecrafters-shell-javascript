@@ -49,7 +49,6 @@ class ExternalCommand extends Command {
         if (this.outputHandler.isStderr) {
           this.outputHandler.writeError(output, false); // Write stderr to file
         } else {
-          console.log('writing to file 2');
           process.stderr.write(output); // Print to terminal
         }
       });

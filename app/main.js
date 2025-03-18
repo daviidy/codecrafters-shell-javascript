@@ -132,6 +132,8 @@ class Shell {
     if (currentArg.length > 0) {
       args.push(currentArg);
     }
+
+    console.log('args', args);
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
