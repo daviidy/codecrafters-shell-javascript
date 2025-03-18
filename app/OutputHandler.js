@@ -18,8 +18,19 @@ class OutputHandler {
 
     write(message, newLine = true) {
         if (this.outputFile) {
-            const content = newLine ? message + '\n' : message;
-            fs.appendFileSync(this.outputFile, content);
+            try {
+                // Create directory structure only when there's actual output to write
+                const dir = path.dirname(this.outputFile);
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir, { recursive: true });
+                }
+                
+                const content = newLine ? message + '\n' : message;
+                fs.appendFileSync(this.outputFile, content);
+            } catch (error) {
+                // Fall back to console
+                process.stdout.write(newLine ? message + '\n' : message);
+            }
         } else {
             const stream = this.isStderr ? process.stderr : process.stdout;
             if (newLine) {
