@@ -17,7 +17,6 @@ class Shell {
     this.outputHandler = new OutputHandler();
     this.inputHandler = new InputHandler(this.rl);
     this.commandRegistry = new CommandRegistry();
-    console.log('Output file:');
     
     // Register builtin commands
     this.commandRegistry.registerBuiltin('exit', new ExitCommand(this.rl));
@@ -133,6 +132,8 @@ class Shell {
     if (currentArg.length > 0) {
       args.push(currentArg);
     }
+
+    console.log('args:', args);
   
     // extract the command name and remove quotes from arguments
     const commandName = args.shift();
