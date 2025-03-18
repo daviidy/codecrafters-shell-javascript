@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { stderr } = require('process');
 
 class OutputHandler {
     constructor(outputFile = null, isStderr = false, append = false) {
@@ -9,10 +10,9 @@ class OutputHandler {
 
         // Create directory and prepare file if needed
         if (outputFile) {
-            console.log('writing to file');
             const dir = path.dirname(outputFile);
+            console.log('OutputHandler', outputFile, stderr, append);
             if (!fs.existsSync(dir)) {
-                console.log('writing to file 2');
                 fs.mkdirSync(dir, { recursive: true });
             }
             
