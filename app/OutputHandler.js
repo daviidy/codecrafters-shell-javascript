@@ -44,8 +44,19 @@ class OutputHandler {
     writeError(message, newLine = true) {
         // If this is a stderr handler with redirection, write to file
         if (this.isStderr && this.outputFile) {
-            const content = newLine ? message + '\n' : message;
-            fs.appendFileSync(this.outputFile, content);
+            try {
+                // Create directory structure only when there's actual error output to write
+                const dir = path.dirname(this.outputFile);
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir, { recursive: true });
+                }
+                
+                const content = newLine ? message + '\n' : message;
+                fs.appendFileSync(this.outputFile, content);
+            } catch (error) {
+                // Fall back to stderr console
+                process.stderr.write(newLine ? message + '\n' : message);
+            }
         } else {
             if (newLine) {
                 process.stderr.write(message + '\n');
