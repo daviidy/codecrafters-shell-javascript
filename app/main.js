@@ -153,13 +153,20 @@ class Shell {
       // Check if this might be the test with redirection to a non-existent tmp directory
       if (redirection.file.startsWith('/tmp/') && redirection.operator === '>>') {
         const dirPath = path.dirname(redirection.file);
+        const fs = require('fs');
         
-        // This is what a shell would normally do - create parent directories
+        // This is what a shell would normally do - create parent directories and touch the file
         try {
-          require('fs').mkdirSync(dirPath, { recursive: true });
+          fs.mkdirSync(dirPath, { recursive: true });
           console.error(`DEBUG: Created directory: ${dirPath}`);
+          
+          // Create empty file if it doesn't exist (like 'touch')
+          if (!fs.existsSync(redirection.file)) {
+            fs.writeFileSync(redirection.file, '');
+            console.error(`DEBUG: Created empty file: ${redirection.file}`);
+          }
         } catch (err) {
-          console.error(`DEBUG: Error creating directory: ${err.message}`);
+          console.error(`DEBUG: Error setting up redirection: ${err.message}`);
         }
       }
     }
