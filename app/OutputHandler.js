@@ -6,6 +6,7 @@ class OutputHandler {
         this.outputFile = outputFile;
         this.isStderr = isStderr;
         this.append = append;
+        console.log('OutputHandler', outputFile, isStderr, append);
 
         // Create directory and prepare file if needed
         if (outputFile) {
