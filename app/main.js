@@ -128,9 +128,10 @@ class Shell {
     const command = this.commandRegistry.getCommand(commandName);
     if (command) {
         if (redirection) {
-            const isStderr = redirection.operator === '2>';
-            const fileOutputHandler = new OutputHandler(redirection.file, isStderr);
-            command.outputHandler = fileOutputHandler;
+          const isStderr = redirection?.operator.startsWith('2');
+          const append = redirection?.operator === '2>>' | redirection?.operator === '1>>';
+          const fileOutputHandler = new OutputHandler(redirection.file, isStderr, append);
+          command.outputHandler = fileOutputHandler;
         }
         return { command, args };
     }
@@ -139,7 +140,7 @@ class Shell {
     const commandType = this.commandRegistry.getCommandType(commandName);
     if (commandType === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
       const isStderr = redirection?.operator.startsWith('2');
-      const append = redirection?.operator === '2>>';
+      const append = redirection?.operator === '2>>' | redirection?.operator === '1>>';
       const outputHandler = redirection
         ? new OutputHandler(redirection.file, isStderr, append)
         : this.outputHandler;
