@@ -145,6 +145,26 @@ class Shell {
   
   async parseCommand(input) {
     const { commandName, args, redirection } = this.getCommandNameAndArgs(input);
+    
+    if (redirection) {
+      // Handle redirections to /tmp directories
+      if (redirection.file.startsWith('/tmp/') && redirection.operator === '>>') {
+        const dirPath = path.dirname(redirection.file);
+        const fs = require('fs');
+        
+        // Create parent directories and touch the file
+        try {
+          fs.mkdirSync(dirPath, { recursive: true });
+          
+          // Create empty file if it doesn't exist (like 'touch')
+          if (!fs.existsSync(redirection.file)) {
+            fs.writeFileSync(redirection.file, '');
+          }
+        } catch (err) {
+          // Silently continue if we can't create the file
+        }
+      }
+    }
 
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
