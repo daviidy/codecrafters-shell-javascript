@@ -85,6 +85,7 @@ class Shell {
           i++;
         }
         i--;
+        redirectionOperator = null; // Reset redirection operator after capturing the file
         continue;
       }
 
