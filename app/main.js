@@ -203,8 +203,17 @@ class Shell {
   
   async start() {
     let shouldContinue = true;
+
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
     
     while (shouldContinue) {
+      process.stdin.on('data', (key) => {
+        if (key === '\t') {
+          console.log('test');
+        }
+      });
       const input = await this.inputHandler.getInput("$ ");
       
       if (input.trim() === '') {
