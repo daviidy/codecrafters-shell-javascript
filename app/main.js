@@ -211,6 +211,7 @@ class Shell {
       
       if (command) {
         const result = await command.execute(args);
+        console.log(result);
         shouldContinue = result.shouldContinue;
       }
     }
