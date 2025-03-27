@@ -33,6 +33,7 @@ class InputHandler {
                     this.readline.write(null, { ctrl: true, name: 'u' }); // Clear the current line
                     this.readline.write(this.inputBuffer);
                 } else {
+                    console.log('welcome dave')
                     // Add the normal character pressed, to the input buffer
                     this.inputBuffer += char;
                 }

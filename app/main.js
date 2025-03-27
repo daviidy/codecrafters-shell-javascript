@@ -219,4 +219,4 @@ class Shell {
 
 // Initialize and start the shell
 const shell = new Shell();
-await shell.start();
+shell.start();
