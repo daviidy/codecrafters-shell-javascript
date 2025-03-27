@@ -11,6 +11,7 @@ class InputHandler {
 
             const onKeypress = (char, key) => { 
                 if (key.name === 'return') {
+                    console.log('welcome dave');
                     this.readline.input.removeListener('keypress', onKeypress);
                     resolve(this.inputBuffer);
                     this.inputBuffer = '';
@@ -33,7 +34,6 @@ class InputHandler {
                     this.readline.write(null, { ctrl: true, name: 'u' }); // Clear the current line
                     this.readline.write(this.inputBuffer);
                 } else {
-                    console.log('welcome dave')
                     // Add the normal character pressed, to the input buffer
                     this.inputBuffer += char;
                 }
