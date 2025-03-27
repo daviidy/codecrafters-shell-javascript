@@ -209,11 +209,9 @@ class Shell {
       
       const { command, args } = await this.parseCommand(input);
       
-      if (command) {
-        const result = await command.execute(args);
-        shouldContinue = result.shouldContinue;
-        console.log(`Command executed:`);
-      }
+      const result = await command.execute(args);
+      shouldContinue = result.shouldContinue;
+      process.stdout.write('$ ');
     }
   }
 }
