@@ -87,7 +87,7 @@ class OutputHandler {
             }
             try {
                 if (newLine) {
-                    process.stderr.write(message + '\n');
+                    process.stderr.write("hello everyone" + '\n');
                 } else {
                     process.stderr.write(message);
                 }
