@@ -143,7 +143,7 @@ class Shell {
     };
   }
   
-  parseCommand(input) {
+  async parseCommand(input) {
     const { commandName, args, redirection } = this.getCommandNameAndArgs(input);
     
     // if (redirection) {
@@ -197,23 +197,22 @@ class Shell {
     return { command: null, args };
   }
   
-  start() {
+  async start() {
     let shouldContinue = true;
     
     while (shouldContinue) {
-      const input = this.inputHandler.getInput("$ ");
+      const input = await this.inputHandler.getInput("$ ");
       
       if (input.trim() === '') {
         continue;
       }
       
-      const { command, args } = this.parseCommand(input);
+      const { command, args } = await this.parseCommand(input);
       
       if (command) {
-        const result = command.execute(args);
+        const result = await command.execute(args);
         shouldContinue = result.shouldContinue;
       }
-      process.stdout.write('$ ');
     }
   }
 }
