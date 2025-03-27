@@ -13,7 +13,7 @@ class InputHandler {
                 if (key.name === 'return' || key.name === 'enter') {
                     this.readline.input.removeListener('keypress', onKeypress);
                     resolve(this.inputBuffer);
-                    this.inputBuffer = '$ ';
+                    this.inputBuffer = '';
                 } else if (key.name === 'tab') {
                     // Handle Tab key for autocompletion
                     const suggestions = this.getSuggestions(this.inputBuffer);
