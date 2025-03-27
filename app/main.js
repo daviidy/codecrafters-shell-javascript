@@ -143,7 +143,7 @@ class Shell {
     };
   }
   
-  async parseCommand(input) {
+  parseCommand(input) {
     const { commandName, args, redirection } = this.getCommandNameAndArgs(input);
     
     // if (redirection) {
@@ -197,20 +197,20 @@ class Shell {
     return { command: null, args };
   }
   
-  async start() {
+  start() {
     let shouldContinue = true;
     
     while (shouldContinue) {
-      const input = await this.inputHandler.getInput("$ ");
+      const input = this.inputHandler.getInput("$ ");
       
       if (input.trim() === '') {
         continue;
       }
       
-      const { command, args } = await this.parseCommand(input);
+      const { command, args } = this.parseCommand(input);
       
       if (command) {
-        const result = await command.execute(args);
+        const result = command.execute(args);
         shouldContinue = result.shouldContinue;
       }
       process.stdout.write('$ ');

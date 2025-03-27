@@ -4,16 +4,17 @@ class InputHandler {
         this.inputBuffer = '';
     }
 
-    async getInput(prompt) {
-        return new Promise((resolve) => {
+    getInput(prompt) {
             this.readline.setPrompt(prompt);
             this.readline.prompt();
 
             const onKeypress = (char, key) => { 
+                let userInput;
                 if (key.name === 'return' || key.name === 'enter') {
                     this.readline.input.removeListener('keypress', onKeypress);
-                    resolve(this.inputBuffer);
                     this.inputBuffer = '';
+                    return userInput;
+                    
                 } else if (key.name === 'tab') {
                     // Handle Tab key for autocompletion
                     const suggestions = this.getSuggestions(this.inputBuffer);
@@ -38,7 +39,6 @@ class InputHandler {
                 }
             };
             this.readline.input.on('keypress', onKeypress);
-        });
     }
 
     getSuggestions(input) {
