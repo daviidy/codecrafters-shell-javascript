@@ -14,6 +14,7 @@ class ExternalCommand extends Command {
       await this.executeCommand(this.commandPath, args);
     } catch (error) {
     }
+    console.log("Command executed");
     return { shouldContinue: true };
   }
   
