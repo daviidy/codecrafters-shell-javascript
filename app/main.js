@@ -212,6 +212,7 @@ class Shell {
       if (command) {
         const result = await command.execute(args);
         shouldContinue = result.shouldContinue;
+        console.log(`Command executed:`);
       }
     }
   }
