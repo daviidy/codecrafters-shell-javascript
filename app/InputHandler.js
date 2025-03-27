@@ -5,6 +5,7 @@ class InputHandler {
     }
 
     async getInput(prompt) {
+        console.log('command', command);
         return new Promise((resolve) => {
             this.readline.setPrompt(prompt);
             this.readline.prompt();
