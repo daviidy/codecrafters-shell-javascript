@@ -198,6 +198,7 @@ class Shell {
   }
   
   async start() {
+    console.log("Welcome to the dave!");
     let shouldContinue = true;
     
     while (shouldContinue) {
