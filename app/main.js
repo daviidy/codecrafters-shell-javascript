@@ -204,7 +204,6 @@ class Shell {
       const input = await this.inputHandler.getInput("$ ");
       
       if (input.trim() === '') {
-        this.inputHandler.readline.prompt();
         continue;
       }
       
@@ -215,7 +214,6 @@ class Shell {
         shouldContinue = result.shouldContinue;
       }
     }
-    this.inputHandler.readline.prompt();
   }
 }
 

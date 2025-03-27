@@ -1,13 +1,12 @@
 class InputHandler {
     constructor(readline) {
         this.readline = readline;
-        this.readline.setPrompt("$ ");
         this.inputBuffer = '';
     }
 
     async getInput(prompt) {
         return new Promise((resolve) => {
-            this.readline.prompt();
+            process.stdout.write(prompt);
 
             const onKeypress = (char, key) => { 
                 if (key.name === 'return' || key.name === 'enter') {
