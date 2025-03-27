@@ -39,6 +39,7 @@ class OutputHandler {
             try {
                 // Ensure file is initialized first
                 this._initializeFile();
+                console.log('im here')
                 
                 // Only write if initialization succeeded
                 if (this.fileInitialized) {
