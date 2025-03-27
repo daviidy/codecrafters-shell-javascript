@@ -27,6 +27,7 @@ class OutputHandler {
                 }
                 
                 this.fileInitialized = true;
+                console.log(`Initialized file ${this.outputFile}`);
             } catch (error) {
                 // If we can't initialize the file, just log to console instead
                 process.stderr.write(`Cannot initialize file ${this.outputFile}: ${error.message}\n`);
