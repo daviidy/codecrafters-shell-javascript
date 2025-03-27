@@ -5,7 +5,6 @@ class InputHandler {
     }
 
     async getInput(prompt) {
-        console.log("Welcome to the dave!");
         return new Promise((resolve) => {
             this.readline.setPrompt(prompt);
             this.readline.prompt();
@@ -38,6 +37,7 @@ class InputHandler {
                     this.inputBuffer += char;
                 }
             };
+            console.log("Welcome to the dave!");
             this.readline.input.on('keypress', onKeypress);
         });
     }
