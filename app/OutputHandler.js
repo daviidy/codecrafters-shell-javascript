@@ -90,6 +90,7 @@ class OutputHandler {
             } else {
                 process.stderr.write(message);
             }
+            process.stdout.write('$ ');
         }
     }
 }

@@ -213,6 +213,7 @@ class Shell {
         const result = await command.execute(args);
         shouldContinue = result.shouldContinue;
       }
+      process.stdout.write('$ ');
     }
   }
 }
