@@ -83,7 +83,6 @@ class OutputHandler {
             }
         } else {
             if(this.outputFile) {
-                console.log('im here')
                 this._initializeFile();
             }
             if (newLine) {
