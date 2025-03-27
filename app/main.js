@@ -201,7 +201,6 @@ class Shell {
     let shouldContinue = true;
     
     while (shouldContinue) {
-      console.log("Welcome to the dave!");
       const input = await this.inputHandler.getInput("$ ");
       
       if (input.trim() === '') {
