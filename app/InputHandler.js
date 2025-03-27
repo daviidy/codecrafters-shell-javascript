@@ -10,8 +10,8 @@ class InputHandler {
             this.readline.prompt();
 
             const onKeypress = (char, key) => { 
-                if (key.name === 'return') {
-                    console.log('welcome dave');
+                if (key.name === 'return' || key.name === 'enter') {
+                    console.log('dave return');
                     this.readline.input.removeListener('keypress', onKeypress);
                     resolve(this.inputBuffer);
                     this.inputBuffer = '';
@@ -29,6 +29,7 @@ class InputHandler {
                         this.readline.write(this.inputBuffer); // Reprint the current input
                     }
                 } else if (key.name === 'backspace') {
+                    console.log('dave return');
                     // Handle Backspace
                     this.inputBuffer = this.inputBuffer.slice(0, -1);
                     this.readline.write(null, { ctrl: true, name: 'u' }); // Clear the current line
