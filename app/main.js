@@ -202,7 +202,6 @@ class Shell {
     
     while (shouldContinue) {
       const input = await this.inputHandler.getInput("$ ");
-      console.log("Welcome to the dave!");
       
       if (input.trim() === '') {
         continue;
@@ -220,4 +219,4 @@ class Shell {
 
 // Initialize and start the shell
 const shell = new Shell();
-shell.start();
+await shell.start();
