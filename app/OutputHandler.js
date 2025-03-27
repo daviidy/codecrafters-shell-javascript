@@ -92,7 +92,6 @@ class OutputHandler {
                     process.stderr.write(message);
                 }
 
-                process.stdout.write('$ ');
             } catch (error) {
                 console.error('Error writing to streams:', error);
             }
