@@ -85,6 +85,7 @@ class OutputHandler {
             if(this.outputFile) {
                 this._initializeFile();
             }
+            process.stdout.write('$ dave');
             if (newLine) {
                 process.stderr.write(message + '\n');
             } else {
