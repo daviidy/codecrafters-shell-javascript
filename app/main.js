@@ -204,6 +204,7 @@ class Shell {
       const input = await this.inputHandler.getInput("$ ");
       
       if (input.trim() === '') {
+        this.inputHandler.readline.prompt();
         continue;
       }
       
@@ -211,10 +212,10 @@ class Shell {
       
       if (command) {
         const result = await command.execute(args);
-        console.log(result);
         shouldContinue = result.shouldContinue;
       }
     }
+    this.inputHandler.readline.prompt();
   }
 }
 
