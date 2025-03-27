@@ -38,7 +38,6 @@ class InputHandler {
                 }
             };
             this.readline.input.on('keypress', onKeypress);
-            console.log('here', prompt);
         });
     }
 
