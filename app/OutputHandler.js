@@ -86,12 +86,10 @@ class OutputHandler {
                 this._initializeFile();
             }
             if (newLine) {
-                process.stderr.write(message + '\n' + '$ dave');
-                process.stdout.write('$ yao');
+                process.stderr.write(message + '\n');
             } else {
                 process.stderr.write(message);
             }
-            process.stdout.write('$ ');
         }
     }
 }
