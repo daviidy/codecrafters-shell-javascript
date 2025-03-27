@@ -13,7 +13,7 @@ class EchoCommand extends Command {
             this.outputHandler.write(output);
         } else {
             // If stderr is redirected, write to stdout anyway
-            process.stdout.write(output + '\n');
+            this.outputHandler.writeError(output + '\n');
         }
         return { shouldContinue: true };
     }

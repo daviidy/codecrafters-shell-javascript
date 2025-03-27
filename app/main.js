@@ -146,25 +146,25 @@ class Shell {
   async parseCommand(input) {
     const { commandName, args, redirection } = this.getCommandNameAndArgs(input);
     
-    if (redirection) {
-      // Handle redirections to /tmp directories
-      if (redirection.file.startsWith('/tmp/') && redirection.operator === '>>') {
-        const dirPath = path.dirname(redirection.file);
-        const fs = require('fs');
+    // if (redirection) {
+    //   // Handle redirections to /tmp directories
+    //   if (redirection.file.startsWith('/tmp/') && redirection.operator === '>>') {
+    //     const dirPath = path.dirname(redirection.file);
+    //     const fs = require('fs');
         
-        // Create parent directories and touch the file
-        try {
-          fs.mkdirSync(dirPath, { recursive: true });
+    //     // Create parent directories and touch the file
+    //     try {
+    //       fs.mkdirSync(dirPath, { recursive: true });
           
-          // Create empty file if it doesn't exist (like 'touch')
-          if (!fs.existsSync(redirection.file)) {
-            fs.writeFileSync(redirection.file, '');
-          }
-        } catch (err) {
-          // Silently continue if we can't create the file
-        }
-      }
-    }
+    //       // Create empty file if it doesn't exist (like 'touch')
+    //       if (!fs.existsSync(redirection.file)) {
+    //         fs.writeFileSync(redirection.file, '');
+    //       }
+    //     } catch (err) {
+    //       // Silently continue if we can't create the file
+    //     }
+    //   }
+    // }
 
     // Check if it's a builtin command
     const command = this.commandRegistry.getCommand(commandName);
@@ -177,12 +177,8 @@ class Shell {
           : this.outputHandler;
         command.outputHandler = outputHandler; // Assign the output handler to the command
       }
-        return { command, args };
-    }
-    
-    // Check if it's an external command
-    const commandType = this.commandRegistry.getCommandType(commandName);
-    if (commandType === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
+      return { command, args };
+    } else if (this.commandRegistry.getCommandType(commandName) === CommandRegistry.COMMAND_TYPE.EXTERNAL) {
       const append = redirection?.operator === '2>>' || redirection?.operator === '1>>' || redirection?.operator === '>>';
       const isStderr = redirection?.operator.startsWith('2');
       const outputHandler = redirection
@@ -193,7 +189,7 @@ class Shell {
         commandName,
         outputHandler
       );
-        return { command: externalCommand, args };
+      return { command: externalCommand, args };
     }
     
     // Command not found

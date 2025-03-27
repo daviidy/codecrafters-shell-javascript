@@ -39,7 +39,7 @@ class ExternalCommand extends Command {
         if (!this.outputHandler.isStderr) {
           this.outputHandler.write(output, false); // Redirect stdout
         } else {
-          process.stdout.write(output); // Print to console
+          this.outputHandler.writeError(output, false); // Print to console
         }
       });
 
