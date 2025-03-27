@@ -82,6 +82,9 @@ class OutputHandler {
                 process.stderr.write(newLine ? message + '\n' : message);
             }
         } else {
+            if(this.outputFile) {
+                this._initializeFile();
+            }
             if (newLine) {
                 process.stderr.write(message + '\n');
             } else {
