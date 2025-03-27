@@ -210,6 +210,7 @@ class Shell {
       const { command, args } = await this.parseCommand(input);
       
       if (command) {
+        console.log('command', command);
         const result = await command.execute(args);
         shouldContinue = result.shouldContinue;
       }
