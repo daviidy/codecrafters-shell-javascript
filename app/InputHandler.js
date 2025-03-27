@@ -37,7 +37,6 @@ class InputHandler {
                     this.inputBuffer += char;
                 }
             };
-            console.log("Welcome to the dave!");
             this.readline.input.on('keypress', onKeypress);
         });
     }
