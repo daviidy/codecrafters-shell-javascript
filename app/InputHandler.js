@@ -11,6 +11,7 @@ class InputHandler {
 
             const onKeypress = (char, key) => { 
                 if (key.name === 'return') {
+                    console.log('Return key detected');
                     this.readline.input.removeListener('keypress', onKeypress);
                     resolve(this.inputBuffer);
                     this.inputBuffer = '';
