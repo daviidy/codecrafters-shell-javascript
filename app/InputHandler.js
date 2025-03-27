@@ -11,7 +11,6 @@ class InputHandler {
 
             const onKeypress = (char, key) => { 
                 if (key.name === 'return' || key.name === 'enter') {
-                    console.log('dave return');
                     this.readline.input.removeListener('keypress', onKeypress);
                     resolve(this.inputBuffer);
                     this.inputBuffer = '';
