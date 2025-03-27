@@ -40,7 +40,6 @@ class ExternalCommand extends Command {
       });
 
       child.stderr.on('data', (data) => {
-        console.log('im here')
         const output = data.toString();
         stderr += output;
         this.outputHandler.writeError(output, true); // Always append for stderr
