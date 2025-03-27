@@ -37,12 +37,14 @@ class ExternalCommand extends Command {
         const output = data.toString();
         stdout += output;
         this.outputHandler.write(output, true); // Always append for stdout
+        process.stdout.write("$ ");
       });
 
       child.stderr.on('data', (data) => {
         const output = data.toString();
         stderr += output;
         this.outputHandler.writeError(output, true); // Always append for stderr
+        process.stdout.write("$ ");
       });
   
       child.on('error', (err) => {

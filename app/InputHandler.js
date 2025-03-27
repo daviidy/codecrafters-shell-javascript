@@ -19,10 +19,10 @@ class InputHandler {
                     if (suggestions.length === 1) {
                         // Autocomplete if there's only one suggestion
                         this.inputBuffer = suggestions[0] + ' ';
-                        process.stdout.write(`\r${prompt}${this.inputBuffer}`); // Reprint the prompt and input
+                        process.stdout.write(`\r${prompt} ${this.inputBuffer}`); // Reprint the prompt and input
                     } else if (suggestions.length > 1) {
                         console.log('\n' + suggestions.join(' '));
-                        process.stdout.write(`${prompt}${this.inputBuffer}`); // Reprint the prompt and input
+                        process.stdout.write(`${prompt} ${this.inputBuffer}`); // Reprint the prompt and input
                     }
                 } else if (key.name === 'backspace') {
                     // Handle Backspace
