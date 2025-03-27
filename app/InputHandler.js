@@ -6,7 +6,8 @@ class InputHandler {
 
     async getInput(prompt) {
         return new Promise((resolve) => {
-            process.stdout.write(prompt);
+            this.readline.setPrompt(prompt);
+            this.readline.prompt();
 
             const onKeypress = (char, key) => { 
                 if (key.name === 'return' || key.name === 'enter') {
@@ -19,10 +20,12 @@ class InputHandler {
                     if (suggestions.length === 1) {
                         // Autocomplete if there's only one suggestion
                         this.inputBuffer = suggestions[0] + ' ';
-                        process.stdout.write(`\r${prompt}${this.inputBuffer}`); // Reprint the prompt and input
+                        this.readline.write(null, { ctrl: true, name: 'u' }); // Clear the current line
+                        this.readline.write(this.inputBuffer); // Write the autocompleted input
                     } else if (suggestions.length > 1) {
                         console.log('\n' + suggestions.join(' '));
-                        process.stdout.write(`${prompt}${this.inputBuffer}`); // Reprint the prompt and input
+                        this.readline.prompt();
+                        this.readline.write(this.inputBuffer); // Reprint the current input
                     }
                 } else if (key.name === 'backspace') {
                     // Handle Backspace
