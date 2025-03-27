@@ -5,7 +5,6 @@ class InputHandler {
     }
 
     async getInput(prompt) {
-        console.log('command', command);
         return new Promise((resolve) => {
             this.readline.setPrompt(prompt);
             this.readline.prompt();
@@ -39,6 +38,7 @@ class InputHandler {
                 }
             };
             this.readline.input.on('keypress', onKeypress);
+            console.log('here', prompt);
         });
     }
 
