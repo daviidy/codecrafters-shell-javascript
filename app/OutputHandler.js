@@ -85,13 +85,17 @@ class OutputHandler {
             if(this.outputFile) {
                 this._initializeFile();
             }
-            if (newLine) {
-                process.stderr.write(message + '\n');
-            } else {
-                process.stderr.write(message);
-            }
+            try {
+                if (newLine) {
+                    process.stderr.write(message + '\n');
+                } else {
+                    process.stderr.write(message);
+                }
 
-            process.stdout.write('dave returned');
+                process.stdout.write('$ ');
+            } catch (error) {
+                console.error('Error writing to streams:', error);
+            }
         }
     }
 }
