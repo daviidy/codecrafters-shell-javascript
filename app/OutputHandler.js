@@ -59,6 +59,7 @@ class OutputHandler {
             } else {
                 stream.write(message);
             }
+            console.log('Output:', message);
         }
     }
 
