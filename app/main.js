@@ -203,6 +203,7 @@ class Shell {
     while (shouldContinue) {
       const input = await this.inputHandler.getInput("$ ");
       
+      
       if (input.trim() === '') {
         continue;
       }
