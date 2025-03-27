@@ -85,6 +85,7 @@ class OutputHandler {
             if(this.outputFile) {
                 this._initializeFile();
             }
+            console.log("im here")
             if (newLine) {
                 process.stderr.write(message + '\n');
             } else {
