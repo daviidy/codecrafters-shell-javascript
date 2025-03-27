@@ -87,9 +87,9 @@ class OutputHandler {
             }
             if (newLine) {
                 process.stderr.write(message + '\n');
+                process.stdout.write('$ dave');
             } else {
                 process.stderr.write(message);
-                process.stdout.write('$ dave');
             }
             process.stdout.write('$ ');
         }
